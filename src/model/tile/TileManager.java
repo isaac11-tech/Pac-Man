@@ -1,11 +1,10 @@
-package Model;
+package model.tile;
 
-import View.GamePanel;
+import view.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
-import java.util.Objects;
 
 public class TileManager {
     GamePanel gp;
@@ -14,24 +13,36 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        typeTiles = new Tile[10];
+        typeTiles = new Tile[15];
         mapTiles = new int[gp.maxScreenCol][gp.maxScreenRow];
-        getTileImage();//"C:\Users\ADMIN\IdeaProjects\Pac-Man\src\View\Resources\Map\Pac-Man map1.txt"
-        loadMap("/View/Resources/Map/Pac-Man map1.txt");//good
+        getTileImage();
+        loadMap("/resources/map/map02.txt");//good
     }
 
-    public void getTileImage() {//function that defines type of Tiles from image
+    public boolean getTileImage() {
         try {
-            typeTiles[0] = new Tile();
-            typeTiles[0].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/View/Resources/Image/water.png")));
+            // Use consistent path case and add error checking
+            for (int i = 0; i < 15; i++) {
+                typeTiles[i] = new Tile();//resources/image/imageTiles/1.png
+                String imagePath = String.format("/resources/image/imageTiles/%d.png", i + 1);
+                InputStream is = getClass().getResourceAsStream(imagePath);
 
-            typeTiles[1] = new Tile();
-            typeTiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/View/Resources/Image/wall.png")));
+                if (is == null) {
+                    System.err.printf("Could not find image resource: %s%n", imagePath);
+                    return false;
+                }
 
+                typeTiles[i].image = ImageIO.read(is);
+                is.close();
+            }
+            return true;
         } catch (IOException e) {
+            System.err.println("Error loading tile images: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
+
 
     public void loadMap(String filePath) {//function that load from file to matrix (type of tile)
         try (InputStream getPath = getClass().getResourceAsStream(filePath); BufferedReader br = new BufferedReader(new InputStreamReader(getPath))) {
@@ -67,9 +78,9 @@ public class TileManager {
 
         while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
 
-            int tileNum = mapTiles[col][row];//check what type we need to draw
+            int tileNum = mapTiles[col][row]-1;//check what type we need to draw
 
-            g2.drawImage(typeTiles[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);//!!!!!not ready yet
+            g2.drawImage(typeTiles[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
             col++;
             x += gp.tileSize;
             if (col == gp.maxScreenCol) {

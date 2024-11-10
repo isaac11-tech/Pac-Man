@@ -1,4 +1,4 @@
-import Control.GameRunnable;
+import control.GameRunnable;
 
 public class Main {
     public static void main(String[] args) {

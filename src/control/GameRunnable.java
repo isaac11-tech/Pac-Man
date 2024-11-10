@@ -1,31 +1,34 @@
-package Control;
+package control;
 
-import View.GamePanel;
+import model.entity.PacManPlayer;
+import model.tile.TileManager;
+import view.GamePanel;
 
-import java.awt.*;
-
-public class GameRunnable extends GamePanel implements Runnable {
+public class GameRunnable implements Runnable {
     int FPS = 60;
-
     Thread gameThread;//create object thread for running the game
+    KeyHandler keyHandler;
+    GamePanel gamePanel;
+    TileManager tileManager;
+    PacManPlayer pacManPlayer;
 
-    //public Player player = new Player(this, keyH);!!!
+    public GameRunnable() {
+        this.keyHandler = new KeyHandler();
+        this.gamePanel = new GamePanel();
+        this.tileManager = new TileManager(gamePanel);
+        this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler);
+        this.gamePanel.setComponents(keyHandler, tileManager, pacManPlayer);
+    }
+
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     public void update() {
-        //player.update();
+        pacManPlayer.update();
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        tileManager.draw(g2);
-        // player.draw(g2);
-        g2.dispose();
-    }
 
     @Override
     public void run() {
@@ -37,7 +40,7 @@ public class GameRunnable extends GamePanel implements Runnable {
 
             update();
 
-            repaint();//
+            gamePanel.repaint();
 
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
