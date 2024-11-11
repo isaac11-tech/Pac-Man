@@ -8,8 +8,8 @@ import java.io.*;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] typeTiles;//array of types of tile
-    int[][] mapTiles;// matrix that presents game panel
+    public Tile[] typeTiles;//array of types of tile
+    public int[][] mapTiles;// matrix that presents game panel
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
@@ -33,6 +33,9 @@ public class TileManager {
                 }
 
                 typeTiles[i].image = ImageIO.read(is);
+                if (i != 0) {
+                    typeTiles[i].collision = true;//reset all the tiles to true except the black tile
+                }
                 is.close();
             }
             return true;
@@ -78,7 +81,7 @@ public class TileManager {
 
         while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
 
-            int tileNum = mapTiles[col][row]-1;//check what type we need to draw
+            int tileNum = mapTiles[col][row] - 1;//check what type we need to draw
 
             g2.drawImage(typeTiles[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
             col++;

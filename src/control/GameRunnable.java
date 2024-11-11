@@ -11,13 +11,15 @@ public class GameRunnable implements Runnable {
     GamePanel gamePanel;
     TileManager tileManager;
     PacManPlayer pacManPlayer;
+    CollisionChecker collisionChecker;
 
     public GameRunnable() {
         this.keyHandler = new KeyHandler();
         this.gamePanel = new GamePanel();
         this.tileManager = new TileManager(gamePanel);
         this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler);
-        this.gamePanel.setComponents(keyHandler, tileManager, pacManPlayer);
+        this.collisionChecker = new CollisionChecker(gamePanel);
+        this.gamePanel.setComponents(keyHandler, tileManager, pacManPlayer,collisionChecker);
     }
 
     public void startGameThread() {

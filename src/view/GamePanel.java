@@ -1,5 +1,6 @@
 package view;
 
+import control.CollisionChecker;
 import control.KeyHandler;
 import model.entity.PacManPlayer;
 import model.tile.TileManager;
@@ -21,8 +22,9 @@ public class GamePanel extends JPanel {
 
     Image icon;
     KeyHandler keyHandler;
-    TileManager tileManager;
+    public TileManager tileManager;
     PacManPlayer pacManPlayer;
+    public CollisionChecker collisionChecker;
 
     public GamePanel() {
         loadIcon();
@@ -55,10 +57,11 @@ public class GamePanel extends JPanel {
         window.setVisible(true);
     }
 
-    public void setComponents(KeyHandler keyHandler, TileManager tileManager, PacManPlayer pacManPlayer) {
+    public void setComponents(KeyHandler keyHandler, TileManager tileManager, PacManPlayer pacManPlayer,CollisionChecker collisionChecker) {
         this.keyHandler = keyHandler;
         this.tileManager = tileManager;
         this.pacManPlayer = pacManPlayer;
+        this.collisionChecker = collisionChecker;
         this.addKeyListener(keyHandler); // Add KeyListener after keyHandler is set
     }
 

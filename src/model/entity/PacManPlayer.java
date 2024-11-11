@@ -15,13 +15,17 @@ public class PacManPlayer extends Entity {
     public PacManPlayer(GamePanel gp, KeyHandler keyH) {
         this.gamePanel = gp;
         this.keyHandler = keyH;
+
+        solidArea = new Rectangle(6, 6, 12, 12);//not ready yet
+
         setSizeAndSpeed();
         getPacManImage();
     }
 
+
     public void setSizeAndSpeed() {
-        screenX = 100;
-        screenY = 100;
+        screenX = 280;//the starting position
+        screenY = 300;//the starting position
         speed = 4;
         direction = "down";
     }
@@ -30,15 +34,26 @@ public class PacManPlayer extends Entity {
         try {
             String path = "/resources/image/imageEntity/PacManImage/";
             up1 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream(path +"pacman_up2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream(path +"pacman_down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream(path +"pacman_down2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream(path +"pacman_left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream(path +"pacman_left2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream(path +"pacman_right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream(path +"pacman_right2.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_up2.png"));
+            down1 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_down1.png"));
+            down2 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_down2.png"));
+            left1 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_left1.png"));
+            left2 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_left2.png"));
+            right1 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_right1.png"));
+            right2 = ImageIO.read(getClass().getResourceAsStream(path + "pacman_right2.png"));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void snapToGrid(String direction) {
+        switch (direction) {
+            case "up", "down":
+                screenX = Math.round((float) screenX / gamePanel.tileSize) * gamePanel.tileSize;
+                break;
+            case "right", "left":
+                screenY = Math.round((float) screenY / gamePanel.tileSize) * gamePanel.tileSize;
+                break;
         }
     }
 
@@ -46,31 +61,51 @@ public class PacManPlayer extends Entity {
         if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
             if (keyHandler.upPressed) {
                 direction = "up";
-                screenY -= speed;
             }
             if (keyHandler.downPressed) {
                 direction = "down";
-                screenY += speed;
             }
             if (keyHandler.leftPressed) {
                 direction = "left";
-                screenX -= speed;
             }
             if (keyHandler.rightPressed) {
                 direction = "right";
-                screenX += speed;
             }
-            spriteCounter++;
-            if (spriteCounter > 12) {
-                if (spriteNum == 1) {
-                    spriteNum = 2;
-                } else if (spriteNum == 2) {
-                    spriteNum = 1;
+
+            collisionOn = false;
+            gamePanel.collisionChecker.checkTile(this);
+
+            //if collision is false pacMan cant move
+            if (!collisionOn) {
+                switch (direction) {
+                    case "up":
+                        screenY -= speed;
+                        break;
+                    case "down":
+                        screenY += speed;
+                        break;
+                    case "left":
+                        screenX -= speed;
+                        break;
+                    case "right":
+                        screenX += speed;
+                        break;
                 }
-                spriteCounter = 0;
             }
         }
+        snapToGrid(direction);//not ready yet
+        spriteCounter++;
+        if (spriteCounter > 6) {
+            if (spriteNum == 1) {
+                spriteNum = 2;
+            } else if (spriteNum == 2) {
+                spriteNum = 1;
+            }
+            spriteCounter = 0;
+        }
     }
+
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         switch (direction) {
@@ -107,7 +142,7 @@ public class PacManPlayer extends Entity {
                 }
                 break;
         }
-        g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gamePanel.tileSize - 6, gamePanel.tileSize - 6, null);
     }
-
 }
+
