@@ -5,7 +5,7 @@ import model.tile.TileManager;
 import view.GamePanel;
 
 public class GameRunnable implements Runnable {
-    int FPS = 60;
+    int FPS = 20;
     Thread gameThread;//create object thread for running the game
     KeyHandler keyHandler;
     GamePanel gamePanel;
@@ -19,7 +19,7 @@ public class GameRunnable implements Runnable {
         this.tileManager = new TileManager(gamePanel);
         this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler);
         this.collisionChecker = new CollisionChecker(gamePanel);
-        this.gamePanel.setComponents(keyHandler, tileManager, pacManPlayer,collisionChecker);
+        this.gamePanel.setComponents(keyHandler, tileManager, pacManPlayer, collisionChecker);
     }
 
     public void startGameThread() {

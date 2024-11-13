@@ -57,7 +57,7 @@ public class GamePanel extends JPanel {
         window.setVisible(true);
     }
 
-    public void setComponents(KeyHandler keyHandler, TileManager tileManager, PacManPlayer pacManPlayer,CollisionChecker collisionChecker) {
+    public void setComponents(KeyHandler keyHandler, TileManager tileManager, PacManPlayer pacManPlayer, CollisionChecker collisionChecker) {
         this.keyHandler = keyHandler;
         this.tileManager = tileManager;
         this.pacManPlayer = pacManPlayer;

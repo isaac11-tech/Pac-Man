@@ -13,7 +13,7 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        typeTiles = new Tile[15];
+        typeTiles = new Tile[16];
         mapTiles = new int[gp.maxScreenCol][gp.maxScreenRow];
         getTileImage();
         loadMap("/resources/map/map02.txt");//good
@@ -22,9 +22,9 @@ public class TileManager {
     public boolean getTileImage() {
         try {
             // Use consistent path case and add error checking
-            for (int i = 0; i < 15; i++) {
-                typeTiles[i] = new Tile();//resources/image/imageTiles/1.png
-                String imagePath = String.format("/resources/image/imageTiles/%d.png", i + 1);
+            for (int i = 0; i < 16; i++) {
+                typeTiles[i] = new Tile();
+                String imagePath = String.format("/resources/image/imageTiles/%d.png", i);
                 InputStream is = getClass().getResourceAsStream(imagePath);
 
                 if (is == null) {
@@ -33,7 +33,7 @@ public class TileManager {
                 }
 
                 typeTiles[i].image = ImageIO.read(is);
-                if (i != 0) {
+                if (i != 1) {
                     typeTiles[i].collision = true;//reset all the tiles to true except the black tile
                 }
                 is.close();
@@ -81,7 +81,7 @@ public class TileManager {
 
         while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
 
-            int tileNum = mapTiles[col][row] - 1;//check what type we need to draw
+            int tileNum = mapTiles[col][row];//check what type we need to draw
 
             g2.drawImage(typeTiles[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
             col++;
