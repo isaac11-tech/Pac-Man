@@ -4,16 +4,16 @@ import view.GamePanel;
 
 import java.awt.*;
 
-public class Coin extends SuperObjects {
+public class SuperCoin extends SuperObjects{
     GamePanel gamePanel;
     public boolean[][] mapCoin;
     int sizeCoin;
 
 
-    public Coin(GamePanel gamePanel) {
+    public SuperCoin(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         this.mapCoin = new boolean[gamePanel.maxScreenCol][gamePanel.maxScreenRow];
-        this.sizeCoin = gamePanel.tileSize / 2;
+        this.sizeCoin = gamePanel.tileSize;
         loadMap();
         getCoinImage();
     }
@@ -21,7 +21,7 @@ public class Coin extends SuperObjects {
     public void loadMap() {
         for (int i = 0; i < gamePanel.maxScreenCol; i++) {
             for (int j = 0; j < gamePanel.maxScreenRow; j++) {
-                if (gamePanel.tileManager.mapTiles[i][j] == 1) {
+                if (gamePanel.tileManager.mapTiles[i][j] == 16) {
                     mapCoin[i][j] = true;
                 } else {
                     mapCoin[i][j] = false;
@@ -39,8 +39,8 @@ public class Coin extends SuperObjects {
         for (int i = 0; i < mapCoin.length; i++) {
             for (int j = 0; j < mapCoin[0].length; j++) {
                 if (mapCoin[i][j]) {
-                    int x = i * gamePanel.tileSize + (gamePanel.tileSize - sizeCoin) / 2;
-                    int y = j * gamePanel.tileSize + (gamePanel.tileSize - sizeCoin) / 2;
+                    int x = i * gamePanel.tileSize ;
+                    int y = j * gamePanel.tileSize ;
                     g2.drawImage(image, x, y, sizeCoin, sizeCoin, null);
                 }
             }

@@ -1,11 +1,13 @@
 package model.entity;
 
-import java.awt.*;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class Entity {
     public int screenX, screenY;
-    public int positionX,positionY;
+    public int positionX, positionY;
     public int speed;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
@@ -14,6 +16,6 @@ public class Entity {
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
-    //public Rectangle solidArea;//NOT NEED YET
     public boolean collisionOn = false;
+
 }

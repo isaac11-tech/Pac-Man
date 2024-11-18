@@ -1,6 +1,8 @@
 package model.entity;
 
 import control.KeyHandler;
+import model.objects.Coin;
+import model.objects.SuperCoin;
 import view.GamePanel;
 
 import javax.imageio.ImageIO;
@@ -12,18 +14,27 @@ import java.util.Objects;
 public class PacManPlayer extends Entity {
     GamePanel gamePanel;
     KeyHandler keyHandler;
+    Coin coin;
+    SuperCoin superCoin;
+    int cunt;
+    int speed = 3;
+    int cuntPixel = 0;
+    boolean isMoving = false;
 
-    public PacManPlayer(GamePanel gp, KeyHandler keyH) {
+    public PacManPlayer(GamePanel gp, KeyHandler keyH, Coin coin, SuperCoin superCoin) {
         this.gamePanel = gp;
         this.keyHandler = keyH;
+        this.coin = coin;
+        this.superCoin = superCoin;
+        cunt = gamePanel.tileSize;
         setSizeAndSpeed();
         getPacManImage();
     }
 
 
     public void setSizeAndSpeed() {
-        positionX = 11;
-        positionY = 12;
+        positionX = 17;
+        positionY = 14;
         direction = "down";
     }
 
@@ -44,47 +55,68 @@ public class PacManPlayer extends Entity {
     }
 
     public void update() {
-        if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
-            if (keyHandler.upPressed) {
-                direction = "up";
-            }
-            if (keyHandler.downPressed) {
-                direction = "down";
-            }
-            if (keyHandler.leftPressed) {
-                direction = "left";
-            }
-            if (keyHandler.rightPressed) {
-                direction = "right";
-            }
+        if (!isMoving) {
 
-            collisionOn = false;
-            gamePanel.collisionChecker.checkTile(this);
+            if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
 
-            //if collision is false pacMan cant move
-            if (!collisionOn) {
-                switch (direction) {
-                    case "up":
-                        positionY -= 1;
-                        break;
-                    case "down":
-                        positionY += 1;
-                        break;
-                    case "left":
-                        positionX -= 1;
-                        break;
-                    case "right":
-                        positionX += 1;
-                        break;
+                if (keyHandler.upPressed) {
+                    direction = "up";
+                } else if (keyHandler.downPressed) {
+                    direction = "down";
+                } else if (keyHandler.leftPressed) {
+                    direction = "left";
+                } else if (keyHandler.rightPressed) {
+                    direction = "right";
+                }
+
+                collisionOn = false;
+                gamePanel.collisionChecker.checkTile(this);
+
+                if (!collisionOn || isTransition()) {
+                    isMoving = true;
+                    cuntPixel = 0;
                 }
             }
+        } else {
+
+            cuntPixel += speed;
+
+            if (cuntPixel >= cunt) {
+                switch (direction) {
+                    case "up":
+                        positionY--;
+                        break;
+                    case "down":
+                        positionY++;
+                        break;
+                    case "left":
+                        if (positionX == 5 && positionY == 14) {
+                            positionX = 29;
+                        } else {
+                            positionX--;
+                        }
+                        break;
+                    case "right":
+                        if (positionX == 29 && positionY == 14) {
+                            positionX = 5;
+                        } else {
+                            positionX++;
+                        }
+                        break;
+                }
+                System.out.println(positionX+" "+positionY);
+                coin.mapCoin[positionX][positionY] = false;
+                superCoin.mapCoin[positionX][positionY] = false;
+                cuntPixel = 0;
+                isMoving = false;
+            }
         }
-        //snapToGrid(direction);//not ready yet
+
         spriteCounter++;
-        if (spriteCounter > 12) {
-            if (spriteNum == 1) {
-                spriteNum = 2;
-            } else if (spriteNum == 2) {
+        if (spriteCounter > 8) {
+            if (isMoving) {
+                spriteNum = (spriteNum == 1) ? 2 : 1;
+            } else {
                 spriteNum = 1;
             }
             spriteCounter = 0;
@@ -93,6 +125,8 @@ public class PacManPlayer extends Entity {
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
+        screenX = positionX * gamePanel.tileSize;
+        screenY = positionY * gamePanel.tileSize;
         switch (direction) {
             case "up":
                 if (spriteNum == 1) {
@@ -101,6 +135,7 @@ public class PacManPlayer extends Entity {
                 if (spriteNum == 2) {
                     image = up2;
                 }
+                screenY -= cuntPixel;
                 break;
             case "down":
                 if (spriteNum == 1) {
@@ -109,6 +144,7 @@ public class PacManPlayer extends Entity {
                 if (spriteNum == 2) {
                     image = down2;
                 }
+                screenY += cuntPixel;
                 break;
             case "left":
                 if (spriteNum == 1) {
@@ -117,6 +153,7 @@ public class PacManPlayer extends Entity {
                 if (spriteNum == 2) {
                     image = left2;
                 }
+                screenX -= cuntPixel;
                 break;
             case "right":
                 if (spriteNum == 1) {
@@ -125,22 +162,12 @@ public class PacManPlayer extends Entity {
                 if (spriteNum == 2) {
                     image = right2;
                 }
+                screenX += cuntPixel;
                 break;
         }
-        screenX = positionX * gamePanel.tileSize;
-        screenY = positionY * gamePanel.tileSize;
-
-        g2.drawImage(image, screenX,screenY, gamePanel.tileSize - 6, gamePanel.tileSize - 6, null);
+        g2.drawImage(image, screenX, screenY, gamePanel.tileSize - 6, gamePanel.tileSize - 6, null);
     }
-    //private void snapToGrid(String direction) {//not ready
-    //    switch (direction) {
-    //        case "up", "down":
-    // //            screenX = Math.round((float) screenX / gamePanel.tileSize) * gamePanel.tileSize;
-    //            break;
-    //        case "right", "left":
-    //            screenY = Math.round((float) screenY / gamePanel.tileSize) * gamePanel.tileSize;
-    //            break;
-    // //    }
-    //}
+    public boolean isTransition() {
+        return (positionX == 5 && positionY == 14) || (positionX == 29 && positionY == 14);
+    }
 }
-

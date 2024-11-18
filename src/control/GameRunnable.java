@@ -1,25 +1,33 @@
 package control;
 
 import model.entity.PacManPlayer;
+import model.objects.Coin;
+import model.objects.SuperCoin;
 import model.tile.TileManager;
 import view.GamePanel;
 
 public class GameRunnable implements Runnable {
-    int FPS = 20;
+    int FPS = 60;
     Thread gameThread;//create object thread for running the game
     KeyHandler keyHandler;
     GamePanel gamePanel;
     TileManager tileManager;
+    Coin coin;
+    SuperCoin superCoin;
     PacManPlayer pacManPlayer;
     CollisionChecker collisionChecker;
+
 
     public GameRunnable() {
         this.keyHandler = new KeyHandler();
         this.gamePanel = new GamePanel();
         this.tileManager = new TileManager(gamePanel);
-        this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler);
+        this.gamePanel.tileManager = this.tileManager;
+        this.coin = new Coin(gamePanel);
+        this.superCoin = new SuperCoin(gamePanel);
+        this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler,coin,superCoin);
         this.collisionChecker = new CollisionChecker(gamePanel);
-        this.gamePanel.setComponents(keyHandler, tileManager, pacManPlayer, collisionChecker);
+        this.gamePanel.setComponents(keyHandler, tileManager,coin,superCoin, pacManPlayer, collisionChecker);
     }
 
     public void startGameThread() {

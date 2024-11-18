@@ -13,16 +13,16 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        typeTiles = new Tile[16];
+        typeTiles = new Tile[17];
         mapTiles = new int[gp.maxScreenCol][gp.maxScreenRow];
         getTileImage();
-        loadMap("/resources/map/map02.txt");//good
+        loadMap("/resources/map/map01.txt");//good
     }
 
     public boolean getTileImage() {
         try {
             // Use consistent path case and add error checking
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < 17; i++) {
                 typeTiles[i] = new Tile();
                 String imagePath = String.format("/resources/image/imageTiles/%d.png", i);
                 InputStream is = getClass().getResourceAsStream(imagePath);
@@ -33,7 +33,7 @@ public class TileManager {
                 }
 
                 typeTiles[i].image = ImageIO.read(is);
-                if (i != 1) {
+                if (i != 1 && i != 16) {//not ready
                     typeTiles[i].collision = true;//reset all the tiles to true except the black tile
                 }
                 is.close();
@@ -68,7 +68,7 @@ public class TileManager {
                 row++;
             }
         } catch (Exception e) {
-            e.printStackTrace(); // or log the error for better debugging
+            e.printStackTrace();
         }
     }
 

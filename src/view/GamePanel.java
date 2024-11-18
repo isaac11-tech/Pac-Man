@@ -3,6 +3,8 @@ package view;
 import control.CollisionChecker;
 import control.KeyHandler;
 import model.entity.PacManPlayer;
+import model.objects.Coin;
+import model.objects.SuperCoin;
 import model.tile.TileManager;
 
 import javax.imageio.ImageIO;
@@ -12,10 +14,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class GamePanel extends JPanel {
-    public final int originalTileSize = 6;
-    public final int scale = 4;
-    public final int tileSize = originalTileSize * scale;
-    public final int maxScreenCol = 25;
+    public final int tileSize = 25;
+    public final int maxScreenCol = 35;
     public final int maxScreenRow = 31;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHigh = tileSize * maxScreenRow;
@@ -23,6 +23,8 @@ public class GamePanel extends JPanel {
     Image icon;
     KeyHandler keyHandler;
     public TileManager tileManager;
+    public Coin coin;
+    SuperCoin superCoin;
     PacManPlayer pacManPlayer;
     public CollisionChecker collisionChecker;
 
@@ -57,9 +59,11 @@ public class GamePanel extends JPanel {
         window.setVisible(true);
     }
 
-    public void setComponents(KeyHandler keyHandler, TileManager tileManager, PacManPlayer pacManPlayer, CollisionChecker collisionChecker) {
+    public void setComponents(KeyHandler keyHandler, TileManager tileManager, Coin coin,SuperCoin superCoin, PacManPlayer pacManPlayer, CollisionChecker collisionChecker) {
         this.keyHandler = keyHandler;
         this.tileManager = tileManager;
+        this.coin = coin;
+        this.superCoin = superCoin;
         this.pacManPlayer = pacManPlayer;
         this.collisionChecker = collisionChecker;
         this.addKeyListener(keyHandler); // Add KeyListener after keyHandler is set
@@ -72,6 +76,12 @@ public class GamePanel extends JPanel {
 
         if (tileManager != null) {
             tileManager.draw(g2);
+        }
+        if (coin != null) {
+            coin.draw(g2);
+        }
+        if (superCoin != null) {
+            superCoin.draw(g2);
         }
         if (pacManPlayer != null) {
             pacManPlayer.draw(g2);
