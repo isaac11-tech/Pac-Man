@@ -28,14 +28,15 @@ public class PacManPlayer extends Entity {
         this.superCoin = superCoin;
         cunt = gamePanel.tileSize;
         speed = 3;
+        point = new Point();
         setSizeAndSpeed();
         getPacManImage();
     }
 
 
     public void setSizeAndSpeed() {
-        positionX = 17;
-        positionY = 14;
+        point.x = 17;
+        point.y = 14;
         direction = "down";
     }
 
@@ -85,34 +86,34 @@ public class PacManPlayer extends Entity {
             if (cuntPixel >= cunt) {
                 switch (direction) {
                     case "up":
-                        positionY--;
+                        point.y--;
                         break;
                     case "down":
-                        positionY++;
+                        point.y++;
                         break;
                     case "left":
-                        if (positionX == 5 && positionY == 14) {
-                            positionX = 29;
+                        if (point.x == 5 && point.y == 14) {
+                            point.x = 29;
                         } else {
-                            positionX--;
+                            point.x--;
                         }
                         break;
                     case "right":
-                        if (positionX == 29 && positionY == 14) {
-                            positionX = 5;
+                        if (point.x == 29 && point.y == 14) {
+                            point.x = 5;
                         } else {
-                            positionX++;
+                            point.x++;
                         }
                         break;
                 }
-                System.out.println(positionX + " " + positionY);
-                if (coin.mapCoin[positionX][positionY]) {
+                System.out.println(point.x + " " + point.y);
+                if (coin.mapCoin[point.x][point.y]) {
                     cuntScore += coin.coinValue;
-                    coin.mapCoin[positionX][positionY] = false;
+                    coin.mapCoin[point.x][point.y] = false;
                 }
-                if (superCoin.mapCoin[positionX][positionY]) {
+                if (superCoin.mapCoin[point.x][point.y]) {
                     cuntScore += superCoin.coinValue;
-                    superCoin.mapCoin[positionX][positionY] = false;
+                    superCoin.mapCoin[point.x][point.y] = false;
                 }
                 cuntPixel = 0;
                 isMoving = false;
@@ -132,8 +133,8 @@ public class PacManPlayer extends Entity {
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        screenX = positionX * gamePanel.tileSize;
-        screenY = positionY * gamePanel.tileSize;
+        screenX = point.x * gamePanel.tileSize;
+        screenY = point.y * gamePanel.tileSize;
         switch (direction) {
             case "up":
                 if (spriteNum == 1) {
@@ -176,7 +177,7 @@ public class PacManPlayer extends Entity {
     }
 
     public boolean isTransition() {//check if we are in the transition
-        return (positionX == 5 && positionY == 14) || (positionX == 29 && positionY == 14);
+        return (point.x == 5 && point.y == 14) || (point.x == 29 && point.y == 14);
     }
     public int getHighScore(){
         int highScore = 0;
