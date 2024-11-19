@@ -17,9 +17,9 @@ public class PacManPlayer extends Entity {
     Coin coin;
     SuperCoin superCoin;
     int cunt;
-    int speed = 3;
     int cuntPixel = 0;
     boolean isMoving = false;
+    public int cuntScore = 0;
 
     public PacManPlayer(GamePanel gp, KeyHandler keyH, Coin coin, SuperCoin superCoin) {
         this.gamePanel = gp;
@@ -27,6 +27,7 @@ public class PacManPlayer extends Entity {
         this.coin = coin;
         this.superCoin = superCoin;
         cunt = gamePanel.tileSize;
+        speed = 3;
         setSizeAndSpeed();
         getPacManImage();
     }
@@ -104,9 +105,15 @@ public class PacManPlayer extends Entity {
                         }
                         break;
                 }
-                System.out.println(positionX+" "+positionY);
-                coin.mapCoin[positionX][positionY] = false;
-                superCoin.mapCoin[positionX][positionY] = false;
+                System.out.println(positionX + " " + positionY);
+                if (coin.mapCoin[positionX][positionY]) {
+                    cuntScore += coin.coinValue;
+                    coin.mapCoin[positionX][positionY] = false;
+                }
+                if (superCoin.mapCoin[positionX][positionY]) {
+                    cuntScore += superCoin.coinValue;
+                    superCoin.mapCoin[positionX][positionY] = false;
+                }
                 cuntPixel = 0;
                 isMoving = false;
             }
@@ -167,7 +174,15 @@ public class PacManPlayer extends Entity {
         }
         g2.drawImage(image, screenX, screenY, gamePanel.tileSize - 6, gamePanel.tileSize - 6, null);
     }
-    public boolean isTransition() {
+
+    public boolean isTransition() {//check if we are in the transition
         return (positionX == 5 && positionY == 14) || (positionX == 29 && positionY == 14);
+    }
+    public int getHighScore(){
+        int highScore = 0;
+        if (cuntScore > highScore) {
+            highScore = cuntScore;
+        }
+        return highScore;
     }
 }

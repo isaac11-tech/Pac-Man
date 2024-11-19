@@ -8,6 +8,7 @@ public class SuperCoin extends SuperObjects{
     GamePanel gamePanel;
     public boolean[][] mapCoin;
     int sizeCoin;
+    public final int coinValue = 50;
 
 
     public SuperCoin(GamePanel gamePanel) {

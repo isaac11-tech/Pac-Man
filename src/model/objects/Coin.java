@@ -8,6 +8,7 @@ public class Coin extends SuperObjects {
     GamePanel gamePanel;
     public boolean[][] mapCoin;
     int sizeCoin;
+    public final int coinValue = 10;
 
 
     public Coin(GamePanel gamePanel) {
@@ -26,7 +27,6 @@ public class Coin extends SuperObjects {
                 } else {
                     mapCoin[i][j] = false;
                 }
-                System.out.println(mapCoin[i][j]);
             }
         }
     }

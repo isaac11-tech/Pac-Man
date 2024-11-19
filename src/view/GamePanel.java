@@ -40,6 +40,29 @@ public class GamePanel extends JPanel {
             throw new RuntimeException(e);
         }
     }
+    public void drawScore(Graphics2D g2) {
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 16));
+
+        g2.drawString("SCORE: " + pacManPlayer.cuntScore, 26, tileSize * 26);
+
+
+        String highScoreText = "HIGH SCORE: " + pacManPlayer.getHighScore();
+        FontMetrics fm = g2.getFontMetrics();
+        int highScoreX = screenWidth / 2 - fm.stringWidth(highScoreText) / 2;
+        g2.drawString(highScoreText, highScoreX, tileSize * 26);
+    }
+   // public void drawLives(Graphics2D g2) {
+       // g2.setColor(Color.YELLOW);
+       // int lifeSize = 20;
+       // int spacing = 25;
+       // int startX = 10;
+       // int startY = 24 - 30;
+       // int lives = 4;
+      //  for (int i = 0; i < lives; i++) {
+       //     g2.fillArc(startX + (i * spacing), startY, lifeSize, lifeSize, 30, 300);
+       // }
+    //}
 
     private void setupWindow() {
         JFrame window = new JFrame();
@@ -85,8 +108,9 @@ public class GamePanel extends JPanel {
         }
         if (pacManPlayer != null) {
             pacManPlayer.draw(g2);
+            drawScore(g2);
+           // drawLives(g2);
         }
-
         g2.dispose();
     }
 }

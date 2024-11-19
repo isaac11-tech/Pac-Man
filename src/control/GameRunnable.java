@@ -7,7 +7,6 @@ import model.tile.TileManager;
 import view.GamePanel;
 
 public class GameRunnable implements Runnable {
-    int FPS = 60;
     Thread gameThread;//create object thread for running the game
     KeyHandler keyHandler;
     GamePanel gamePanel;
@@ -17,6 +16,7 @@ public class GameRunnable implements Runnable {
     PacManPlayer pacManPlayer;
     CollisionChecker collisionChecker;
 
+    int FPS = 60;
 
     public GameRunnable() {
         this.keyHandler = new KeyHandler();
