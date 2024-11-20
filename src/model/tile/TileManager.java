@@ -8,8 +8,8 @@ import java.io.*;
 
 public class TileManager {
     GamePanel gp;
-    public Tile[] typeTiles;//array of types of tile
-    public int[][] mapTiles;// matrix that presents game panel
+    public static Tile[] typeTiles;//array of types of tile
+    public static int[][] mapTiles;// matrix that presents game panel
 
     public TileManager(GamePanel gp) {
         this.gp = gp;

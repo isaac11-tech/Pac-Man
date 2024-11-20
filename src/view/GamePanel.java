@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class GamePanel extends JPanel {
-    public final int tileSize = 25;
+    public static final int tileSize = 25;
     public final int maxScreenCol = 35;
     public final int maxScreenRow = 31;
     public final int screenWidth = tileSize * maxScreenCol;
@@ -35,7 +35,7 @@ public class GamePanel extends JPanel {
 
     private void loadIcon() {
         try {
-            icon = ImageIO.read(new File("src/Resources/Image/imageEntity/ICON1.png"));
+            icon = ImageIO.read(new File("src/resources/image/objects/ICON1.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

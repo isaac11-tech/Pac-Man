@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+import static view.GamePanel.tileSize;
+
 public class PacManPlayer extends Entity {
     GamePanel gamePanel;
     KeyHandler keyHandler;
@@ -26,7 +28,7 @@ public class PacManPlayer extends Entity {
         this.keyHandler = keyH;
         this.coin = coin;
         this.superCoin = superCoin;
-        cunt = gamePanel.tileSize;
+        cunt = tileSize;
         speed = 3;
         point = new Point();
         setSizeAndSpeed();
@@ -106,7 +108,7 @@ public class PacManPlayer extends Entity {
                         }
                         break;
                 }
-                System.out.println(point.x + " " + point.y);
+                System.out.println(point.x + " " + point.y);//!!!!!!!!!!!!!!!!!!
                 if (coin.mapCoin[point.x][point.y]) {
                     cuntScore += coin.coinValue;
                     coin.mapCoin[point.x][point.y] = false;
@@ -133,8 +135,8 @@ public class PacManPlayer extends Entity {
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        screenX = point.x * gamePanel.tileSize;
-        screenY = point.y * gamePanel.tileSize;
+        screenX = point.x * tileSize;
+        screenY = point.y * tileSize;
         switch (direction) {
             case "up":
                 if (spriteNum == 1) {
@@ -173,13 +175,14 @@ public class PacManPlayer extends Entity {
                 screenX += cuntPixel;
                 break;
         }
-        g2.drawImage(image, screenX, screenY, gamePanel.tileSize - 6, gamePanel.tileSize - 6, null);
+        g2.drawImage(image, screenX, screenY, tileSize - 6, tileSize - 6, null);
     }
 
     public boolean isTransition() {//check if we are in the transition
         return (point.x == 5 && point.y == 14) || (point.x == 29 && point.y == 14);
     }
-    public int getHighScore(){
+
+    public int getHighScore() {
         int highScore = 0;
         if (cuntScore > highScore) {
             highScore = cuntScore;

@@ -1,12 +1,17 @@
 package control;
 
 import model.entity.Entity;
+import model.entity.Ghost;
 import view.GamePanel;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-//dont forget do map static
+
+import static model.tile.TileManager.mapTiles;
+import static model.tile.TileManager.typeTiles;
+
+//don't forget do map static
 public class CollisionChecker {
     GamePanel gamePanel;
 
@@ -19,53 +24,55 @@ public class CollisionChecker {
         int nextTile;
         switch (entity.direction) {
             case "up":
-                nextTile = (gamePanel.tileManager.mapTiles[entity.point.x][entity.point.y - 1]);
-                if (gamePanel.tileManager.typeTiles[nextTile].collision) {
+                nextTile = mapTiles[entity.point.x][entity.point.y - 1];
+                if (typeTiles[nextTile].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "down":
-                nextTile = (gamePanel.tileManager.mapTiles[entity.point.x][entity.point.y + 1]);
-                if (gamePanel.tileManager.typeTiles[nextTile].collision) {
+                nextTile = (mapTiles[entity.point.x][entity.point.y + 1]);
+                if (typeTiles[nextTile].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "left":
-                nextTile = (gamePanel.tileManager.mapTiles[entity.point.x - 1][entity.point.y]);
-                if (gamePanel.tileManager.typeTiles[nextTile].collision) {
+                nextTile = (mapTiles[entity.point.x - 1][entity.point.y]);
+                if (typeTiles[nextTile].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "right":
-                nextTile = (gamePanel.tileManager.mapTiles[entity.point.x + 1][entity.point.y]);
-                if (gamePanel.tileManager.typeTiles[nextTile].collision) {
+                nextTile = (mapTiles[entity.point.x + 1][entity.point.y]);
+                if (typeTiles[nextTile].collision) {
                     entity.collisionOn = true;
                 }
                 break;
         }
     }
-    public List<Point> getDirection(Entity entity) {
+
+    public List<Point> getDirection(Ghost ghost) {
         List<Point> direction = new ArrayList<>();
+        String currPoz = ghost.getCurrentPosition();
         int nextTile;
         //up
-        nextTile = (gamePanel.tileManager.mapTiles[entity.point.x][entity.point.y - 1]);
-        if (!gamePanel.tileManager.typeTiles[nextTile].collision) {
-            direction.add(new Point(entity.point.x, entity.point.y - 1));
+        nextTile = (mapTiles[ghost.point.x][ghost.point.y - 1]);
+    if (!typeTiles[nextTile].collision && currPoz.equals("down")) {
+            direction.add(new Point(ghost.point.x, ghost.point.y - 1));
         }
         //right
-        nextTile = (gamePanel.tileManager.mapTiles[entity.point.x + 1][entity.point.y]);
-        if (!gamePanel.tileManager.typeTiles[nextTile].collision) {
-            direction.add(new Point(entity.point.x + 1, entity.point.y));
+        nextTile = (mapTiles[ghost.point.x + 1][ghost.point.y]);
+    if (!typeTiles[nextTile].collision && currPoz.equals("left")) {
+            direction.add(new Point(ghost.point.x + 1, ghost.point.y));
         }
         //down
-        nextTile = (gamePanel.tileManager.mapTiles[entity.point.x][entity.point.y + 1]);
-        if (!gamePanel.tileManager.typeTiles[nextTile].collision) {
-            direction.add(new Point(entity.point.x, entity.point.y + 1));
+        nextTile = (mapTiles[ghost.point.x][ghost.point.y + 1]);
+        if (!typeTiles[nextTile].collision && currPoz.equals("up")) {
+            direction.add(new Point(ghost.point.x, ghost.point.y + 1));
         }
         //left
-        nextTile = (gamePanel.tileManager.mapTiles[entity.point.x - 1][entity.point.y]);
-        if (!gamePanel.tileManager.typeTiles[nextTile].collision) {
-            direction.add(new Point(entity.point.x - 1, entity.point.y));
+        nextTile = (mapTiles[ghost.point.x - 1][ghost.point.y]);
+        if (!typeTiles[nextTile].collision && currPoz.equals("right")) {
+            direction.add(new Point(ghost.point.x - 1, ghost.point.y));
         }
         return direction;
     }
