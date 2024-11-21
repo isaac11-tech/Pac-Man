@@ -54,24 +54,26 @@ public class CollisionChecker {
         List<Point> direction = new ArrayList<>();
         String currPoz = ghost.getCurrentPosition();
         int nextTile;
+        
+
         //up
         nextTile = (mapTiles[ghost.point.x][ghost.point.y - 1]);
-    if (!typeTiles[nextTile].collision && currPoz.equals("down")) {
+        if (!typeTiles[nextTile].collision && !currPoz.equals("down")) {
             direction.add(new Point(ghost.point.x, ghost.point.y - 1));
         }
         //right
         nextTile = (mapTiles[ghost.point.x + 1][ghost.point.y]);
-    if (!typeTiles[nextTile].collision && currPoz.equals("left")) {
+        if (!typeTiles[nextTile].collision && !currPoz.equals("left")) {
             direction.add(new Point(ghost.point.x + 1, ghost.point.y));
         }
         //down
         nextTile = (mapTiles[ghost.point.x][ghost.point.y + 1]);
-        if (!typeTiles[nextTile].collision && currPoz.equals("up")) {
+        if (!typeTiles[nextTile].collision && !currPoz.equals("up")) {
             direction.add(new Point(ghost.point.x, ghost.point.y + 1));
         }
         //left
         nextTile = (mapTiles[ghost.point.x - 1][ghost.point.y]);
-        if (!typeTiles[nextTile].collision && currPoz.equals("right")) {
+        if (!typeTiles[nextTile].collision && !currPoz.equals("right")) {
             direction.add(new Point(ghost.point.x - 1, ghost.point.y));
         }
         return direction;

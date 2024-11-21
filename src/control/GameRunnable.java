@@ -1,5 +1,6 @@
 package control;
 
+import model.entity.Blinky;
 import model.entity.PacManPlayer;
 import model.objects.Coin;
 import model.objects.SuperCoin;
@@ -15,6 +16,7 @@ public class GameRunnable implements Runnable {
     SuperCoin superCoin;
     PacManPlayer pacManPlayer;
     CollisionChecker collisionChecker;
+    Blinky blinky;
 
     int FPS = 60;
 
@@ -27,7 +29,8 @@ public class GameRunnable implements Runnable {
         this.superCoin = new SuperCoin(gamePanel);
         this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler,coin,superCoin);
         this.collisionChecker = new CollisionChecker(gamePanel);
-        this.gamePanel.setComponents(keyHandler, tileManager,coin,superCoin, pacManPlayer, collisionChecker);
+        this.blinky = new Blinky(collisionChecker, pacManPlayer);
+        this.gamePanel.setComponents(keyHandler, tileManager,coin,superCoin, pacManPlayer, collisionChecker,blinky);
     }
 
     public void startGameThread() {
@@ -37,6 +40,7 @@ public class GameRunnable implements Runnable {
 
     public void update() {
         pacManPlayer.update();
+        blinky.update();
     }
 
 

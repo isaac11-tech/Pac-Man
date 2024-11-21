@@ -7,9 +7,20 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Clyde extends Ghost {
-    public Clyde(CollisionChecker collisionChecker) {
-        super(collisionChecker);
+    public Clyde(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
+        super(collisionChecker, pacManPlayer);
     }
+
+    @Override
+    public void chaseMode() {
+
+    }
+
+    @Override
+    public void scatterMode() {
+
+    }
+
     public void getClydeImage() {
         try {
             String path = "/resources/image/imageEntity/imageGhosts/clyde/";
@@ -30,6 +41,16 @@ public class Clyde extends Ghost {
 
     @Override
     void setBasePosition() {
+
+    }
+
+    @Override
+    void setScatterPosition() {
+
+    }
+
+    @Override
+    public void update() {
 
     }
 }

@@ -7,9 +7,20 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Inky extends Ghost {
-    public Inky(CollisionChecker collisionChecker) {
-        super(collisionChecker);
+    public Inky(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
+        super(collisionChecker, pacManPlayer);
     }
+
+    @Override
+    public void chaseMode() {
+
+    }
+
+    @Override
+    public void scatterMode() {
+
+    }
+
     public void getInkyImage() {
         try {
             String path = "/resources/image/imageEntity/imageGhosts/inky/";
@@ -30,6 +41,16 @@ public class Inky extends Ghost {
 
     @Override
     void setBasePosition() {
+
+    }
+
+    @Override
+    void setScatterPosition() {
+
+    }
+
+    @Override
+    public void update() {
 
     }
 }

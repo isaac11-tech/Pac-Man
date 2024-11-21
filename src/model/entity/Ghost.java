@@ -15,46 +15,42 @@ abstract public class Ghost extends Entity {
     Point sortWay;
     Point prevPoint;
     int cuntPixel;
+    String direction = "up";
 
-    public Ghost(CollisionChecker collisionChecker,PacManPlayer pacManPlayer) {
+
+    public Ghost(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
         this.pacManPlayer = pacManPlayer;
         this.collisionChecker = collisionChecker;
+        this.point = new Point();
+        this.target = new Point();
+        this.sortWay = new Point();
+
     }
 
-    public String getCurrentPosition() {
-        String prevDirection = null;
-        if (prevPoint == null) {
-            prevPoint = point;
-        } else if (point.x > prevPoint.x) {
-            prevDirection = "right";
-            prevPoint = point;
-        } else if (point.x < prevPoint.x) {
-            prevDirection = "left";
-            prevPoint = point;
-        } else if (point.y > prevPoint.y) {
-            prevDirection = "down";
-            prevPoint = point;
-        } else if (point.y < prevPoint.y) {
-            prevDirection = "up";
-            prevPoint = point;
-        }
-        return prevDirection;
+    abstract public void chaseMode();
+
+    abstract public void scatterMode();
+
+    public void frightenedMode() {
+
     }
+
+    public void eatenMode() {
+
+    }
+
+    public void update() {
+        chaseMode();
+        move();
+    }
+
+    ;
 
     abstract void setBasePosition();
 
-    public void getShortWay() {
-        List<Point> direction = collisionChecker.getDirection(this);
-        Ghost.this.sortWay = direction.getFirst();
-        double minDistance = Ghost.this.sortWay.distance(target);
-        for (int i = 1; i < direction.size(); i++) {
-            if (direction.get(i).distance(target) < minDistance) {
-                Ghost.this.sortWay = direction.get(i);
-                minDistance = Ghost.this.sortWay.distance(target);
-            }
-        }
-    }
-    public void chaseMode() {
+    abstract void setScatterPosition();
+
+    public void move() {
         getShortWay();
         // Update direction based on sortWay
         if (sortWay.x > point.x) {
@@ -78,17 +74,35 @@ abstract public class Ghost extends Entity {
         }
     }
 
-    public void update() {
+    public String getCurrentPosition() {//function that return the  current direction
+        return direction;
+    }
 
+    public void getShortWay() {
+        List<Point> direction = collisionChecker.getDirection(this);
+        if (direction.isEmpty()) {
+            sortWay = new Point(point);
+            System.out.println("is not way to ghost");
+            return;
+        }
 
+        Ghost.this.sortWay = direction.getFirst();
+        double minDistance = Ghost.this.sortWay.distance(target);
+        for (int i = 1; i < direction.size(); i++) {
+            if (direction.get(i).distance(target) < minDistance) {
+                Ghost.this.sortWay = direction.get(i);
+                minDistance = Ghost.this.sortWay.distance(target);
+            }
+        }
+        System.out.println(sortWay.x + " " + sortWay.y);
     }
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         screenX = point.x * tileSize;
         screenY = point.y * tileSize;
-        
-        // Select sprite based on direction and animation frame
+
+        // Normal ghost sprites based on direction
         switch (direction) {
             case "up":
                 image = (spriteNum == 1) ? up1 : up2;
@@ -107,10 +121,8 @@ abstract public class Ghost extends Entity {
                 screenX += cuntPixel;
                 break;
             default:
-                // Use default sprite if direction is not set
                 image = right1;
         }
-        
         if (image != null) {
             g2.drawImage(image, screenX, screenY, tileSize - 6, tileSize - 6, null);
         }

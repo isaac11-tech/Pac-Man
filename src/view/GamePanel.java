@@ -2,6 +2,7 @@ package view;
 
 import control.CollisionChecker;
 import control.KeyHandler;
+import model.entity.Blinky;
 import model.entity.PacManPlayer;
 import model.objects.Coin;
 import model.objects.SuperCoin;
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel {
     SuperCoin superCoin;
     PacManPlayer pacManPlayer;
     public CollisionChecker collisionChecker;
+    Blinky blinky;
 
     public GamePanel() {
         loadIcon();
@@ -82,7 +84,7 @@ public class GamePanel extends JPanel {
         window.setVisible(true);
     }
 
-    public void setComponents(KeyHandler keyHandler, TileManager tileManager, Coin coin,SuperCoin superCoin, PacManPlayer pacManPlayer, CollisionChecker collisionChecker) {
+    public void setComponents(KeyHandler keyHandler, TileManager tileManager, Coin coin,SuperCoin superCoin, PacManPlayer pacManPlayer, CollisionChecker collisionChecker, Blinky blinky) {
         this.keyHandler = keyHandler;
         this.tileManager = tileManager;
         this.coin = coin;
@@ -90,6 +92,7 @@ public class GamePanel extends JPanel {
         this.pacManPlayer = pacManPlayer;
         this.collisionChecker = collisionChecker;
         this.addKeyListener(keyHandler); // Add KeyListener after keyHandler is set
+        this.blinky = blinky;
     }
 
     @Override
@@ -110,6 +113,9 @@ public class GamePanel extends JPanel {
             pacManPlayer.draw(g2);
             drawScore(g2);
            // drawLives(g2);
+        }
+        if (blinky != null) {
+            blinky.draw(g2);
         }
         g2.dispose();
     }
