@@ -16,10 +16,10 @@ import java.io.IOException;
 
 public class GamePanel extends JPanel {
     public static final int tileSize = 25;
-    public final int maxScreenCol = 35;
-    public final int maxScreenRow = 31;
-    public final int screenWidth = tileSize * maxScreenCol;
-    public final int screenHigh = tileSize * maxScreenRow;
+    public static final int maxScreenCol = 25;
+    public static final int maxScreenRow = 31;
+    public static final int screenWidth = tileSize * maxScreenCol;
+    public static final int screenHigh = tileSize * maxScreenRow;
 
     Image icon;
     KeyHandler keyHandler;
@@ -74,7 +74,7 @@ public class GamePanel extends JPanel {
         window.setIconImage(icon);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHigh));
-        this.setBackground(Color.GREEN);
+        this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
 

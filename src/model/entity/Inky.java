@@ -3,6 +3,7 @@ package model.entity;
 import control.CollisionChecker;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -45,8 +46,13 @@ public class Inky extends Ghost {
     }
 
     @Override
-    void setScatterPosition() {
+    Point getBasePosition() {
+        return null;
+    }
 
+    @Override
+    Point setScatterPosition() {
+        return null;
     }
 
     @Override

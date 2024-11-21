@@ -3,6 +3,7 @@ package model.entity;
 import control.CollisionChecker;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -32,14 +33,21 @@ public class Blinky extends Ghost {
 
     @Override
     void setBasePosition() {
+        x = 6;
+        y = 5;
         this.point.setLocation(6, 5);
         speed = 2;
         target.setLocation(19, 12);
     }
 
     @Override
-    void setScatterPosition() {
+    Point getBasePosition() {
+        return new Point(x, y);
+    }
 
+    @Override
+    Point setScatterPosition() {
+        return null;
     }
 
     @Override

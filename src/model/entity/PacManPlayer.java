@@ -37,9 +37,9 @@ public class PacManPlayer extends Entity {
 
 
     public void setSizeAndSpeed() {
-        point.x = 17;
-        point.y = 14;
-        direction = "down";
+        point.x = 12;
+        point.y = 25;
+        direction = "right";
     }
 
     public void getPacManImage() {
@@ -94,21 +94,21 @@ public class PacManPlayer extends Entity {
                         point.y++;
                         break;
                     case "left":
-                        if (point.x == 5 && point.y == 14) {
-                            point.x = 29;
+                        if (point.x == 0 && point.y == 14) {
+                            point.x = 24;
                         } else {
                             point.x--;
                         }
                         break;
                     case "right":
-                        if (point.x == 29 && point.y == 14) {
-                            point.x = 5;
+                        if (point.x == 24 && point.y == 14) {
+                            point.x = 0;
                         } else {
                             point.x++;
                         }
                         break;
                 }
-              //  System.out.println(point.x + " " + point.y);//!!!!!!!!!!!!!!!!!!
+               System.out.println(point.x + " " + point.y);//!!!!!!!!!!!!!!!!!!
                 if (coin.mapCoin[point.x][point.y]) {
                     cuntScore += coin.coinValue;
                     coin.mapCoin[point.x][point.y] = false;
@@ -179,7 +179,7 @@ public class PacManPlayer extends Entity {
     }
 
     public boolean isTransition() {//check if we are in the transition
-        return (point.x == 5 && point.y == 14) || (point.x == 29 && point.y == 14);
+        return (point.x == 0 && point.y == 14) || (point.x == 24 && point.y == 14);
     }
 
     public int getHighScore() {

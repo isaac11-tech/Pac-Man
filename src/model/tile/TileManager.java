@@ -6,6 +6,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
 
+import static view.GamePanel.maxScreenCol;
+import static view.GamePanel.maxScreenRow;
+
 public class TileManager {
     GamePanel gp;
     public static Tile[] typeTiles;//array of types of tile
@@ -14,7 +17,7 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
         typeTiles = new Tile[17];
-        mapTiles = new int[gp.maxScreenCol][gp.maxScreenRow];
+        mapTiles = new int[maxScreenCol][maxScreenRow];
         getTileImage();
         loadMap("/resources/map/map01.txt");//good
     }
@@ -56,12 +59,13 @@ public class TileManager {
 
             int row = 0;
 
-            while (row < gp.maxScreenRow) {
+            while (row < maxScreenRow) {
                 String line = br.readLine();
                 if (line == null) break;  // End of file reached
 
                 String[] numbers = line.split(" ");
-                for (int col = 0; col < gp.maxScreenCol; col++) {
+                System.out.println(numbers.length);
+                for (int col = 0; col < maxScreenCol; col++) {
                     int num = Integer.parseInt(numbers[col]);
                     mapTiles[col][row] = num;
                 }
@@ -79,14 +83,14 @@ public class TileManager {
         int x = 0;
         int y = 0;
 
-        while (col < gp.maxScreenCol && row < gp.maxScreenRow) {
+        while (col < maxScreenCol && row < maxScreenRow) {
 
             int tileNum = mapTiles[col][row];//check what type we need to draw
 
             g2.drawImage(typeTiles[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
             col++;
             x += gp.tileSize;
-            if (col == gp.maxScreenCol) {
+            if (col == maxScreenCol) {
                 col = 0;
                 x = 0;
                 row++;

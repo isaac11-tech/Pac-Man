@@ -13,9 +13,10 @@ abstract public class Ghost extends Entity {
     CollisionChecker collisionChecker;
     Point target;
     Point sortWay;
-    Point prevPoint;
     int cuntPixel;
     String direction = "up";
+    int x;
+    int y;
 
 
     public Ghost(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
@@ -36,7 +37,8 @@ abstract public class Ghost extends Entity {
     }
 
     public void eatenMode() {
-
+        this.target.setLocation(getBasePosition());
+        //need to change the Image and speed
     }
 
     public void update() {
@@ -46,9 +48,11 @@ abstract public class Ghost extends Entity {
 
     ;
 
-    abstract void setBasePosition();
+     abstract void setBasePosition();
 
-    abstract void setScatterPosition();
+     abstract Point getBasePosition();
+
+     abstract Point setScatterPosition();
 
     public void move() {
         getShortWay();
@@ -94,7 +98,7 @@ abstract public class Ghost extends Entity {
                 minDistance = Ghost.this.sortWay.distance(target);
             }
         }
-        System.out.println(sortWay.x + " " + sortWay.y);
+        //System.out.println(sortWay.x + " " + sortWay.y);
     }
 
     public void draw(Graphics2D g2) {
