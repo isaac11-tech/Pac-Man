@@ -6,14 +6,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import static view.GamePanel.tileSize;
+import static view.GamePanel.*;
 
 abstract public class Ghost extends Entity {
     PacManPlayer pacManPlayer;
     CollisionChecker collisionChecker;
     Point target;
     Point sortWay;
-    int cuntPixel;
+    Point scatterPosition;
+    int cuntPixel = 0;
+    boolean isStart = true;
     String direction = "up";
     int x;
     int y;
@@ -22,18 +24,29 @@ abstract public class Ghost extends Entity {
     public Ghost(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
         this.pacManPlayer = pacManPlayer;
         this.collisionChecker = collisionChecker;
-        this.point = new Point();
-        this.target = new Point();
-        this.sortWay = new Point();
+        this.point = new Point(0, 0);
+        this.target = new Point(0, 0);
+        this.sortWay = new Point(0, 0);
 
     }
 
-    abstract public void chaseMode();
+    abstract void setBasePosition();
+
+    abstract Point getBasePosition();
+
+    abstract void setScatterPosition();
+
+    abstract Point getScatterPosition();
 
     abstract public void scatterMode();
 
-    public void frightenedMode() {
+    abstract void chaseMode();//pass
 
+    public void frightenedMode() {
+        int randomX = (int) (Math.random() * screenWidth);
+        int randomY = (int) (Math.random() * screenHigh);
+        this.target.setLocation(randomX, randomY);
+        this.speed = 1;
     }
 
     public void eatenMode() {
@@ -42,40 +55,37 @@ abstract public class Ghost extends Entity {
     }
 
     public void update() {
-        chaseMode();
+       // scatterMode();
+        //frightenedMode();
         move();
     }
 
-    ;
-
-     abstract void setBasePosition();
-
-     abstract Point getBasePosition();
-
-     abstract Point setScatterPosition();
-
     public void move() {
-        getShortWay();
-        // Update direction based on sortWay
-        if (sortWay.x > point.x) {
-            direction = "right";
-        } else if (sortWay.x < point.x) {
-            direction = "left";
-        } else if (sortWay.y > point.y) {
-            direction = "down";
-        } else if (sortWay.y < point.y) {
-            direction = "up";
-        }
-
         // Update position
-        cuntPixel += speed;
-        if (cuntPixel >= tileSize) {
-            point.setLocation(sortWay);
-            cuntPixel = 0;
-
-            // Update sprite animation
-            spriteNum = spriteNum == 1 ? 2 : 1;
+        if (isStart) {
+            getShortWay();
+            // Update direction based on sortWay
+            if (sortWay.x > point.x) {
+                direction = "right";
+            } else if (sortWay.x < point.x) {
+                direction = "left";
+            } else if (sortWay.y > point.y) {
+                direction = "down";
+            } else if (sortWay.y < point.y) {
+                direction = "up";
+            }
+            isStart = false;
+        } else {
+            cuntPixel += speed;
+            if (cuntPixel >= tileSize) {
+                point.setLocation(sortWay);
+                cuntPixel = 0;
+                // Update sprite animation
+                spriteNum = spriteNum == 1 ? 2 : 1;
+                isStart = true;
+            }
         }
+        //System.out.println(point.x + " " + point.y + "this cunt pixel " + cuntPixel);
     }
 
     public String getCurrentPosition() {//function that return the  current direction
@@ -83,13 +93,8 @@ abstract public class Ghost extends Entity {
     }
 
     public void getShortWay() {
+        //  behaviorIfInCage();
         List<Point> direction = collisionChecker.getDirection(this);
-        if (direction.isEmpty()) {
-            sortWay = new Point(point);
-            System.out.println("is not way to ghost");
-            return;
-        }
-
         Ghost.this.sortWay = direction.getFirst();
         double minDistance = Ghost.this.sortWay.distance(target);
         for (int i = 1; i < direction.size(); i++) {
@@ -98,7 +103,13 @@ abstract public class Ghost extends Entity {
                 minDistance = Ghost.this.sortWay.distance(target);
             }
         }
-        //System.out.println(sortWay.x + " " + sortWay.y);
+    }
+
+    public void behaviorIfInCage() {
+        //need to update the target after it finish !!!!
+        if (point.y == 14 || point.y == 13 && point.x >= 9 && point.x <= 15) {
+            target = new Point(15, 12);
+        }
     }
 
     public void draw(Graphics2D g2) {

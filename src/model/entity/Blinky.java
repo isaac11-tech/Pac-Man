@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Blinky extends Ghost {
+
     public Blinky(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
         super(collisionChecker, pacManPlayer);
         getBlinkyImage();
         setBasePosition();
+        setScatterPosition();
     }
 
     public void getBlinkyImage() {
@@ -33,11 +35,10 @@ public class Blinky extends Ghost {
 
     @Override
     void setBasePosition() {
-        x = 6;
-        y = 5;
-        this.point.setLocation(6, 5);
+        x = 17;
+        y = 14;
+        this.point.setLocation(x, y);
         speed = 2;
-        target.setLocation(19, 12);
     }
 
     @Override
@@ -46,18 +47,25 @@ public class Blinky extends Ghost {
     }
 
     @Override
-    Point setScatterPosition() {
-        return null;
+    void setScatterPosition() {
+        scatterPosition = new Point(1, 5);
+    }
+
+    @Override
+    Point getScatterPosition() {
+        if (scatterPosition == null) {
+            System.out.println("scatterPosition is null");
+        }
+        return scatterPosition;
+    }
+    @Override
+    public void scatterMode() {
+        target = getScatterPosition();
     }
 
     @Override
     public void chaseMode() {
         target = pacManPlayer.point;
-    }
-
-    @Override
-    public void scatterMode() {
-
     }
 
 }

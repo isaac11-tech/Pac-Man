@@ -57,11 +57,12 @@ public class CollisionChecker {
         }
     }
 
+
+
     public List<Point> getDirection(Ghost ghost) {
         List<Point> direction = new ArrayList<>();
         String currPoz = ghost.getCurrentPosition();
         int nextTile;
-
         // up
         if (ghost.point.y > 0) {
             nextTile = (mapTiles[ghost.point.x][ghost.point.y - 1]);
@@ -77,7 +78,6 @@ public class CollisionChecker {
                 direction.add(new Point(ghost.point.x + 1, ghost.point.y));
             }
         }
-
         // down
         if (ghost.point.y < GamePanel.maxScreenRow - 1) {
             nextTile = (mapTiles[ghost.point.x][ghost.point.y + 1]);
@@ -95,6 +95,7 @@ public class CollisionChecker {
         }
 
         if (direction.isEmpty()) {
+            System.out.println("not way to go");
             if (currPoz.equals("up")) {
                 direction.add(new Point(ghost.point.x, ghost.point.y + 1));
             } else if (currPoz.equals("down")) {

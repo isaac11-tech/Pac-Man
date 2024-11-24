@@ -50,7 +50,12 @@ public class Pinky extends Ghost {
     }
 
     @Override
-    Point setScatterPosition() {
+    void setScatterPosition() {
+
+    }
+
+    @Override
+    Point getScatterPosition() {
         return null;
     }
 

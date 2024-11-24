@@ -22,6 +22,26 @@ public class Clyde extends Ghost {
 
     }
 
+    @Override
+    void setBasePosition() {
+
+    }
+
+    @Override
+    Point getBasePosition() {
+        return null;
+    }
+
+    @Override
+    void setScatterPosition() {
+
+    }
+
+    @Override
+    Point getScatterPosition() {
+        return null;
+    }
+
     public void getClydeImage() {
         try {
             String path = "/resources/image/imageEntity/imageGhosts/clyde/";
@@ -37,26 +57,5 @@ public class Clyde extends Ghost {
             System.out.println("can't load image");
             e.printStackTrace();
         }
-    }
-
-
-    @Override
-    void setBasePosition() {
-
-    }
-
-    @Override
-    Point getBasePosition() {
-        return null;
-    }
-
-    @Override
-    Point setScatterPosition() {
-        return null;
-    }
-
-    @Override
-    public void update() {
-
     }
 }
