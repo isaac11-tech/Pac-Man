@@ -4,30 +4,32 @@ import view.GamePanel;
 
 import java.awt.*;
 
+import static model.tile.TileManager.mapTiles;
+import static view.GamePanel.*;
+
 public class SuperCoin extends SuperObjects{
     GamePanel gamePanel;
-    public boolean[][] mapCoin;
+    public static boolean[][] mapSuperCoin;
     int sizeCoin;
     public final int coinValue = 50;
 
 
     public SuperCoin(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        this.mapCoin = new boolean[gamePanel.maxScreenCol][gamePanel.maxScreenRow];
-        this.sizeCoin = gamePanel.tileSize;
+        mapSuperCoin = new boolean[maxScreenCol][maxScreenRow];
+        this.sizeCoin = tileSize;
         loadMap();
         getCoinImage();
     }
 
     public void loadMap() {
-        for (int i = 0; i < gamePanel.maxScreenCol; i++) {
-            for (int j = 0; j < gamePanel.maxScreenRow; j++) {
-                if (gamePanel.tileManager.mapTiles[i][j] == 16) {
-                    mapCoin[i][j] = true;
+        for (int i = 0; i < maxScreenCol; i++) {
+            for (int j = 0; j < maxScreenRow; j++) {
+                if (mapTiles[i][j] == 16) {
+                    mapSuperCoin[i][j] = true;
                 } else {
-                    mapCoin[i][j] = false;
+                    mapSuperCoin[i][j] = false;
                 }
-                System.out.println(mapCoin[i][j]);
             }
         }
     }
@@ -37,11 +39,11 @@ public class SuperCoin extends SuperObjects{
     }
 
     public void draw(Graphics2D g2) {
-        for (int i = 0; i < mapCoin.length; i++) {
-            for (int j = 0; j < mapCoin[0].length; j++) {
-                if (mapCoin[i][j]) {
-                    int x = i * gamePanel.tileSize ;
-                    int y = j * gamePanel.tileSize ;
+        for (int i = 0; i < mapSuperCoin.length; i++) {
+            for (int j = 0; j < mapSuperCoin[0].length; j++) {
+                if (mapSuperCoin[i][j]) {
+                    int x = i * tileSize ;
+                    int y = j * tileSize ;
                     g2.drawImage(image, x, y, sizeCoin, sizeCoin, null);
                 }
             }

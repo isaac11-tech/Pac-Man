@@ -2,6 +2,7 @@ package control;
 
 import model.entity.Entity;
 import model.entity.Ghost;
+import model.entity.PacManPlayer;
 import view.GamePanel;
 
 import java.awt.*;
@@ -107,5 +108,8 @@ public class CollisionChecker {
             }
         }
         return direction;
+    }
+    public boolean collisionPacManWithGhost(PacManPlayer pacManPlayer ,Ghost ghost){
+        return pacManPlayer.point.equals(ghost.point);
     }
 }

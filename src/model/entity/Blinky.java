@@ -16,26 +16,9 @@ public class Blinky extends Ghost {
         setScatterPosition();
     }
 
-    public void getBlinkyImage() {
-        try {
-            String path = "/resources/image/imageEntity/imageGhosts/blinky/";
-            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "up1.png")));
-            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "up2.png")));
-            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "down1.png")));
-            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "down2.png")));
-            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "left1.png")));
-            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "left2.png")));
-            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "right1.png")));
-            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "right2.png")));
-        } catch (IOException e) {
-            System.out.println("can't load image");
-            e.printStackTrace();
-        }
-    }
-
     @Override
     void setBasePosition() {
-        x = 17;
+        x = 19;
         y = 14;
         this.point.setLocation(x, y);
         speed = 2;
@@ -58,6 +41,7 @@ public class Blinky extends Ghost {
         }
         return scatterPosition;
     }
+
     @Override
     public void scatterMode() {
         target = getScatterPosition();
@@ -65,7 +49,24 @@ public class Blinky extends Ghost {
 
     @Override
     public void chaseMode() {
-        target = pacManPlayer.point;
+       target = pacManPlayer.getPacManPoz();
     }
+    public void getBlinkyImage() {
+        try {
+            String path = "/resources/image/imageEntity/imageGhosts/blinky/";
+            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "up1.png")));
+            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "up2.png")));
+            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "down1.png")));
+            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "down2.png")));
+            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "left1.png")));
+            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "left2.png")));
+            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "right1.png")));
+            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "right2.png")));
+        } catch (IOException e) {
+            System.out.println("can't load image");
+            e.printStackTrace();
+        }
+    }
+
 
 }

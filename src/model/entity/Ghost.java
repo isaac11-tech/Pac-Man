@@ -2,24 +2,44 @@ package model.entity;
 
 import control.CollisionChecker;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import static view.GamePanel.*;
 
 abstract public class Ghost extends Entity {
     PacManPlayer pacManPlayer;
     CollisionChecker collisionChecker;
-    Point target;
+    protected Point target;
     Point sortWay;
     Point scatterPosition;
+    //for frightened mode
+    BufferedImage frightenedImage;
+    static boolean isFrightenedMode = false;
+    //fot eaten mode
+    boolean isEatenMode = false;
+    BufferedImage up;
+    BufferedImage down;
+    BufferedImage left;
+    BufferedImage right;
     int cuntPixel = 0;
     boolean isStart = true;
     String direction = "up";
     int x;
     int y;
 
+    // Add timer variables
+    private long lastScatterTime = 0;
+    private long lastChaseTime = 0;
+    private long lastFrightenedTime = 0;
+    private static final long SCATTER_INTERVAL = 7000; // 7 seconds in milliseconds
+    private static final long CHASE_INTERVAL = 20000; // 20 seconds in milliseconds
+    private static final long FRIGHTENED_INTERVAL = 6000; // 6 seconds in milliseconds
+    private boolean isScatterMode = true;
 
     public Ghost(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
         this.pacManPlayer = pacManPlayer;
@@ -27,7 +47,8 @@ abstract public class Ghost extends Entity {
         this.point = new Point(0, 0);
         this.target = new Point(0, 0);
         this.sortWay = new Point(0, 0);
-
+        getFrightenedImage();
+        getEatenImage();
     }
 
     abstract void setBasePosition();
@@ -42,21 +63,52 @@ abstract public class Ghost extends Entity {
 
     abstract void chaseMode();//pass
 
-    public void frightenedMode() {
-        int randomX = (int) (Math.random() * screenWidth);
-        int randomY = (int) (Math.random() * screenHigh);
-        this.target.setLocation(randomX, randomY);
+    private void frightenedMode() {
+        int randomX = (int) (Math.random() * (screenWidth / tileSize - 1));// not fixed !!!!!!!!!
+        int randomY = (int) (Math.random() * (screenHigh / tileSize - 1));
+        this.target = new Point(randomX, randomY);
         this.speed = 1;
     }
 
     public void eatenMode() {
-        this.target.setLocation(getBasePosition());
-        //need to change the Image and speed
+        isEatenMode = true;
+        this.target = new Point(getBasePosition());
+        speed = 4;
     }
 
-    public void update() {
-       // scatterMode();
-        //frightenedMode();
+    public void update() {//not finish!!!!!!!
+        //  Check and update modes based on timers
+        long currentTime = System.currentTimeMillis();
+        if (collisionChecker.collisionPacManWithGhost(pacManPlayer,this)){
+            if (isFrightenedMode){
+                eatenMode();
+            }else {
+               pacManPlayer.returnToBasePoz();
+            }
+        }
+//        if (isFrightenedMode) {
+//            if (currentTime - lastFrightenedTime >= FRIGHTENED_INTERVAL) {
+//                isFrightenedMode = false;
+//                speed = 2; // Reset speed to normal
+//            } else {
+//                frightenedMode();
+//            }
+//            lastFrightenedTime = currentTime;
+//            //isFrightenedMode = false;
+//        }
+//        if (isScatterMode && currentTime - lastScatterTime >= SCATTER_INTERVAL) {
+//            chaseMode();
+//            lastChaseTime = currentTime;
+//            isScatterMode = false;
+//        }
+//        if (!isScatterMode && currentTime - lastChaseTime >= CHASE_INTERVAL) {
+//
+//            scatterMode();
+//            lastScatterTime = currentTime;
+//            isScatterMode = true;
+//        }
+        System.out.println("target: " + this.getClass() + ": " + this.target.x + "," + this.target.y);
+        //   eatenMode();
         move();
     }
 
@@ -138,8 +190,52 @@ abstract public class Ghost extends Entity {
             default:
                 image = right1;
         }
+        if (isFrightenedMode) {
+            image = frightenedImage;
+        }
+        if (isEatenMode) {
+            switch (direction) {
+                case "up":
+                    image = up;
+                    break;
+                case "down":
+                    image = down;
+                    break;
+                case "left":
+                    image = left;
+                    break;
+                case "right":
+                    image = right;
+                    break;
+                default:
+                    image = right;
+            }
+        }
         if (image != null) {
             g2.drawImage(image, screenX, screenY, tileSize - 6, tileSize - 6, null);
+        }
+    }
+
+    public void getFrightenedImage() {
+        try {
+            String path = "/resources/image/imageEntity/imageGhosts/ImageFrightened/f1.png";
+            frightenedImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path)));
+        } catch (IOException e) {
+            System.out.println("can't load image");
+            e.printStackTrace();
+        }
+    }
+
+    public void getEatenImage() {
+        try {
+            String path = "/resources/image/imageEntity/imageGhosts/ImageEaten/";
+            up = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "up.png")));
+            down = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "down.png")));
+            left = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "left.png")));
+            right = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path + "right.png")));
+        } catch (IOException e) {
+            System.out.println("can't load image");
+            e.printStackTrace();
         }
     }
 }

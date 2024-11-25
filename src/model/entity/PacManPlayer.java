@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+import static model.entity.Ghost.isFrightenedMode;
+import static model.objects.SuperCoin.mapSuperCoin;
 import static view.GamePanel.tileSize;
 
 public class PacManPlayer extends Entity {
@@ -35,11 +37,17 @@ public class PacManPlayer extends Entity {
         getPacManImage();
     }
 
-
     public void setSizeAndSpeed() {
         point.x = 12;
         point.y = 25;
         direction = "right";
+    }
+    public void returnToBasePoz(){
+        point.x = 12;
+        point.y = 25;
+    }
+    public Point getPacManPoz(){
+        return point;
     }
 
     public void getPacManImage() {
@@ -108,13 +116,15 @@ public class PacManPlayer extends Entity {
                         }
                         break;
                 }
+                //System.out.println(point.x + " " + point.y);
                 if (coin.mapCoin[point.x][point.y]) {
                     cuntScore += coin.coinValue;
                     coin.mapCoin[point.x][point.y] = false;
                 }
-                if (superCoin.mapCoin[point.x][point.y]) {
+                if (mapSuperCoin[point.x][point.y]) {
                     cuntScore += superCoin.coinValue;
-                    superCoin.mapCoin[point.x][point.y] = false;
+                    mapSuperCoin[point.x][point.y] = false;
+                    isFrightenedMode = true;
                 }
                 cuntPixel = 0;
                 isMoving = false;

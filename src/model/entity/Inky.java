@@ -13,13 +13,39 @@ public class Inky extends Ghost {
     }
 
     @Override
-    public void chaseMode() {
+    void setBasePosition() {
+        x = 13;
+        y = 14;
+        this.point.setLocation(x, y);
+        speed = 2;
+    }
 
+    @Override
+    public void chaseMode() {
+        target = new Point(pacManPlayer.point.x, pacManPlayer.point.y);
     }
 
     @Override
     public void scatterMode() {
+        target = getScatterPosition();
+    }
 
+    @Override
+    Point getBasePosition() {
+        return new Point(x, y);
+    }
+
+    @Override
+    void setScatterPosition() {
+        scatterPosition = new Point(1, 27);
+    }
+
+    @Override
+    Point getScatterPosition() {
+        if (scatterPosition == null) {
+            System.out.println("scatterPosition is null");
+        }
+        return scatterPosition;
     }
 
     public void getInkyImage() {
@@ -37,31 +63,5 @@ public class Inky extends Ghost {
             System.out.println("can't load image");
             e.printStackTrace();
         }
-    }
-
-
-    @Override
-    void setBasePosition() {
-
-    }
-
-    @Override
-    Point getBasePosition() {
-        return null;
-    }
-
-    @Override
-    void setScatterPosition() {
-
-    }
-
-    @Override
-    Point getScatterPosition() {
-        return null;
-    }
-
-    @Override
-    public void update() {
-
     }
 }

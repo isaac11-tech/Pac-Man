@@ -11,35 +11,41 @@ public class Clyde extends Ghost {
     public Clyde(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
         super(collisionChecker, pacManPlayer);
     }
-
     @Override
     public void chaseMode() {
+        target = new Point(pacManPlayer.point.x, pacManPlayer.point.y);
 
     }
 
     @Override
     public void scatterMode() {
-
+        target = getScatterPosition();
     }
 
     @Override
     void setBasePosition() {
-
+        x = 12;
+        y = 14;
+        this.point.setLocation(x, y);
+        speed = 2;
     }
 
     @Override
     Point getBasePosition() {
-        return null;
+        return new Point(x, y);
     }
 
     @Override
     void setScatterPosition() {
-
+        scatterPosition = new Point(23, 5);
     }
 
     @Override
     Point getScatterPosition() {
-        return null;
+        if (scatterPosition == null) {
+            System.out.println("scatterPosition is null");
+        }
+        return scatterPosition;
     }
 
     public void getClydeImage() {
