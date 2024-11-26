@@ -10,11 +10,14 @@ import java.util.Objects;
 public class Pinky extends Ghost {
     public Pinky(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
         super(collisionChecker, pacManPlayer);
+        getPinkyImage();
+        setBasePosition();
+        setScatterPosition();
     }
 
     @Override
     void setBasePosition() {
-        x = 10;
+        x = 14;
         y = 14;
         this.point.setLocation(x, y);
         speed = 2;
@@ -22,12 +25,27 @@ public class Pinky extends Ghost {
 
     @Override
     public void chaseMode() {
-        target = new Point(pacManPlayer.point.x, pacManPlayer.point.y);
+        if (pacManPlayer.direction.equals("up")) {
+            target.x = pacManPlayer.getPacManPoz().x;
+            target.y = pacManPlayer.getPacManPoz().y - 4;
+        }
+        if (pacManPlayer.direction.equals("down")) {
+            target.x = pacManPlayer.getPacManPoz().x;
+            target.y = pacManPlayer.getPacManPoz().y + 4;
+        }
+        if (pacManPlayer.direction.equals("left")) {
+            target.x = pacManPlayer.getPacManPoz().x - 4;
+            target.y = pacManPlayer.getPacManPoz().y;
+        }
+        if (pacManPlayer.direction.equals("right")) {
+            target.x = pacManPlayer.getPacManPoz().x + 4;
+            target.y = pacManPlayer.getPacManPoz().y;
+        }
     }
 
     @Override
     public void scatterMode() {
-        target = getScatterPosition();
+        target = new Point(getScatterPosition());
     }
 
     @Override

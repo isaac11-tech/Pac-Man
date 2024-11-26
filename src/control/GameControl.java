@@ -1,13 +1,16 @@
 package control;
 
-import model.entity.Blinky;
-import model.entity.PacManPlayer;
+import model.entity.*;
 import model.objects.Coin;
 import model.objects.SuperCoin;
 import model.tile.TileManager;
 import view.GamePanel;
 
-public class GameRunnable implements Runnable {
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameControl implements Runnable {
     Thread gameThread;//create object thread for running the game
     KeyHandler keyHandler;
     GamePanel gamePanel;
@@ -17,20 +20,26 @@ public class GameRunnable implements Runnable {
     PacManPlayer pacManPlayer;
     CollisionChecker collisionChecker;
     Blinky blinky;
+    Clyde clyde;
+    Inky inky;
+    Pinky pinky;
 
     int FPS = 60;
 
-    public GameRunnable() {
+    public GameControl() {
         this.keyHandler = new KeyHandler();
         this.gamePanel = new GamePanel();
         this.tileManager = new TileManager(gamePanel);
         this.gamePanel.tileManager = this.tileManager;
         this.coin = new Coin(gamePanel);
         this.superCoin = new SuperCoin(gamePanel);
-        this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler,coin,superCoin);
+        this.pacManPlayer = new PacManPlayer(gamePanel, keyHandler, coin, superCoin);
         this.collisionChecker = new CollisionChecker(gamePanel);
         this.blinky = new Blinky(collisionChecker, pacManPlayer);
-        this.gamePanel.setComponents(keyHandler, tileManager,coin,superCoin, pacManPlayer, collisionChecker,blinky);
+        this.clyde = new Clyde(collisionChecker, pacManPlayer);
+        this.inky = new Inky(collisionChecker, pacManPlayer);
+        this.pinky = new Pinky(collisionChecker, pacManPlayer);
+        this.gamePanel.setComponents(keyHandler, tileManager, coin, superCoin, pacManPlayer, collisionChecker, blinky,clyde,inky,pinky);
     }
 
     public void startGameThread() {
@@ -41,6 +50,9 @@ public class GameRunnable implements Runnable {
     public void update() {
         pacManPlayer.update();
         blinky.update();
+        clyde.update();
+        pinky.update();
+        inky.update();
     }
 
 

@@ -7,14 +7,20 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
+import static view.GamePanel.*;
+import static view.GamePanel.tileSize;
+
 public class Inky extends Ghost {
     public Inky(CollisionChecker collisionChecker, PacManPlayer pacManPlayer) {
         super(collisionChecker, pacManPlayer);
+        getInkyImage();
+        setBasePosition();
+        setScatterPosition();
     }
 
     @Override
     void setBasePosition() {
-        x = 13;
+        x = 11;
         y = 14;
         this.point.setLocation(x, y);
         speed = 2;
@@ -22,12 +28,14 @@ public class Inky extends Ghost {
 
     @Override
     public void chaseMode() {
-        target = new Point(pacManPlayer.point.x, pacManPlayer.point.y);
+        int randomX = (int) (Math.random() * (screenWidth / tileSize - 1));// not fixed !!!!!!!!!
+        int randomY = (int) (Math.random() * (screenHigh / tileSize - 1));
+        this.target = new Point(randomX, randomY);
     }
 
     @Override
     public void scatterMode() {
-        target = getScatterPosition();
+        target = new Point(getScatterPosition());
     }
 
     @Override

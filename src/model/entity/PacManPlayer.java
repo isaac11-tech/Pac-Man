@@ -116,7 +116,7 @@ public class PacManPlayer extends Entity {
                         }
                         break;
                 }
-                //System.out.println(point.x + " " + point.y);
+                System.out.println(point.x + " " + point.y);
                 if (coin.mapCoin[point.x][point.y]) {
                     cuntScore += coin.coinValue;
                     coin.mapCoin[point.x][point.y] = false;
@@ -124,7 +124,7 @@ public class PacManPlayer extends Entity {
                 if (mapSuperCoin[point.x][point.y]) {
                     cuntScore += superCoin.coinValue;
                     mapSuperCoin[point.x][point.y] = false;
-                    isFrightenedMode = true;
+                    Ghost.startFrightenedMode();
                 }
                 cuntPixel = 0;
                 isMoving = false;

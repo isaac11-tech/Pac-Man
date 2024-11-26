@@ -18,7 +18,7 @@ public class Blinky extends Ghost {
 
     @Override
     void setBasePosition() {
-        x = 19;
+        x = 12;
         y = 14;
         this.point.setLocation(x, y);
         speed = 2;
@@ -44,12 +44,14 @@ public class Blinky extends Ghost {
 
     @Override
     public void scatterMode() {
-        target = getScatterPosition();
+        target = new Point(getScatterPosition());
+        speed = 2;
     }
 
     @Override
     public void chaseMode() {
        target = pacManPlayer.getPacManPoz();
+       speed = 2;
     }
     public void getBlinkyImage() {
         try {

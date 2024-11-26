@@ -2,8 +2,7 @@ package view;
 
 import control.CollisionChecker;
 import control.KeyHandler;
-import model.entity.Blinky;
-import model.entity.PacManPlayer;
+import model.entity.*;
 import model.objects.Coin;
 import model.objects.SuperCoin;
 import model.tile.TileManager;
@@ -29,6 +28,9 @@ public class GamePanel extends JPanel {
     PacManPlayer pacManPlayer;
     public CollisionChecker collisionChecker;
     Blinky blinky;
+    Clyde clyde;
+    Inky inky;
+    Pinky pinky;
 
     public GamePanel() {
         loadIcon();
@@ -42,29 +44,32 @@ public class GamePanel extends JPanel {
             throw new RuntimeException(e);
         }
     }
+
     public void drawScore(Graphics2D g2) {
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Arial", Font.BOLD, 16));
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
 
-        g2.drawString("SCORE: " + pacManPlayer.cuntScore, 26, tileSize * 26);
+        g2.drawString("SCORE: " + pacManPlayer.cuntScore, 3 * tileSize, 2 * tileSize);
 
 
         String highScoreText = "HIGH SCORE: " + pacManPlayer.getHighScore();
-        FontMetrics fm = g2.getFontMetrics();
-        int highScoreX = screenWidth / 2 - fm.stringWidth(highScoreText) / 2;
-        g2.drawString(highScoreText, highScoreX, tileSize * 26);
+        g2.drawString(highScoreText, 9 * tileSize, 2 * tileSize);
+
+        String level = "LEVEL : 1";
+        g2.drawString(level, 18 * tileSize, 2 * tileSize);
     }
-   // public void drawLives(Graphics2D g2) {
-       // g2.setColor(Color.YELLOW);
-       // int lifeSize = 20;
-       // int spacing = 25;
-       // int startX = 10;
-       // int startY = 24 - 30;
-       // int lives = 4;
-      //  for (int i = 0; i < lives; i++) {
-       //     g2.fillArc(startX + (i * spacing), startY, lifeSize, lifeSize, 30, 300);
-       // }
-    //}
+
+    public void drawLives(Graphics2D g2) {//need to chane!!!!!!!!!!!!!!!
+        g2.setColor(Color.YELLOW);
+        int lifeSize = 20;
+        int spacing = 25;
+        int x = 3 * tileSize;
+        int y = 30;
+        int lives = 3;
+        for (int i = 0; i < lives; i++) {
+            g2.fillArc(x + (i * spacing), y, lifeSize, lifeSize, 30, 300);
+        }
+    }
 
     private void setupWindow() {
         JFrame window = new JFrame();
@@ -84,7 +89,7 @@ public class GamePanel extends JPanel {
         window.setVisible(true);
     }
 
-    public void setComponents(KeyHandler keyHandler, TileManager tileManager, Coin coin,SuperCoin superCoin, PacManPlayer pacManPlayer, CollisionChecker collisionChecker, Blinky blinky) {
+    public void setComponents(KeyHandler keyHandler, TileManager tileManager, Coin coin, SuperCoin superCoin, PacManPlayer pacManPlayer, CollisionChecker collisionChecker, Blinky blinky,Clyde clyde,Inky inky,Pinky pinky) {
         this.keyHandler = keyHandler;
         this.tileManager = tileManager;
         this.coin = coin;
@@ -93,6 +98,9 @@ public class GamePanel extends JPanel {
         this.collisionChecker = collisionChecker;
         this.addKeyListener(keyHandler); // Add KeyListener after keyHandler is set
         this.blinky = blinky;
+        this.clyde = clyde;
+        this.inky = inky;
+        this.pinky = pinky;
     }
 
     @Override
@@ -112,10 +120,19 @@ public class GamePanel extends JPanel {
         if (pacManPlayer != null) {
             pacManPlayer.draw(g2);
             drawScore(g2);
-           // drawLives(g2);
+            drawLives(g2);
         }
         if (blinky != null) {
             blinky.draw(g2);
+        }
+        if (clyde != null) {
+            clyde.draw(g2);
+        }
+        if (inky != null) {
+            inky.draw(g2);
+        }
+        if (pinky != null) {
+            pinky.draw(g2);
         }
         g2.dispose();
     }

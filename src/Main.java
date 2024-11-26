@@ -1,8 +1,8 @@
-import control.GameRunnable;
+import control.GameControl;
 
 public class Main {
     public static void main(String[] args) {
-        GameRunnable gameRunnable = new GameRunnable();
+        GameControl gameRunnable = new GameControl();
         gameRunnable.startGameThread();
 
     }

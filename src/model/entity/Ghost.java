@@ -20,6 +20,7 @@ abstract public class Ghost extends Entity {
     //for frightened mode
     BufferedImage frightenedImage;
     static boolean isFrightenedMode = false;
+    static long lastFrightenedTime = 0;
     //fot eaten mode
     boolean isEatenMode = false;
     BufferedImage up;
@@ -35,7 +36,6 @@ abstract public class Ghost extends Entity {
     // Add timer variables
     private long lastScatterTime = 0;
     private long lastChaseTime = 0;
-    private long lastFrightenedTime = 0;
     private static final long SCATTER_INTERVAL = 7000; // 7 seconds in milliseconds
     private static final long CHASE_INTERVAL = 20000; // 20 seconds in milliseconds
     private static final long FRIGHTENED_INTERVAL = 6000; // 6 seconds in milliseconds
@@ -70,49 +70,84 @@ abstract public class Ghost extends Entity {
         this.speed = 1;
     }
 
+    public static void startFrightenedMode() {
+        isFrightenedMode = true;
+        lastFrightenedTime = System.currentTimeMillis();
+    }
+
     public void eatenMode() {
         isEatenMode = true;
         this.target = new Point(getBasePosition());
         speed = 4;
+        //need to fyines this mode whan its come to the base
     }
 
-    public void update() {//not finish!!!!!!!
-        //  Check and update modes based on timers
+    public void update() {
         long currentTime = System.currentTimeMillis();
-        if (collisionChecker.collisionPacManWithGhost(pacManPlayer,this)){
-            if (isFrightenedMode){
+        //behaviorIfInCage();
+        // Check collision with PacMan
+        if (collisionChecker.collisionPacManWithGhost(pacManPlayer, this)) {
+            if (isFrightenedMode) {
                 eatenMode();
-            }else {
-               pacManPlayer.returnToBasePoz();
+            } else if (!isEatenMode) {
+                pacManPlayer.returnToBasePoz();
             }
         }
-//        if (isFrightenedMode) {
-//            if (currentTime - lastFrightenedTime >= FRIGHTENED_INTERVAL) {
-//                isFrightenedMode = false;
-//                speed = 2; // Reset speed to normal
-//            } else {
-//                frightenedMode();
-//            }
-//            lastFrightenedTime = currentTime;
-//            //isFrightenedMode = false;
-//        }
-//        if (isScatterMode && currentTime - lastScatterTime >= SCATTER_INTERVAL) {
-//            chaseMode();
-//            lastChaseTime = currentTime;
-//            isScatterMode = false;
-//        }
-//        if (!isScatterMode && currentTime - lastChaseTime >= CHASE_INTERVAL) {
-//
-//            scatterMode();
-//            lastScatterTime = currentTime;
-//            isScatterMode = true;
-//        }
-        System.out.println("target: " + this.getClass() + ": " + this.target.x + "," + this.target.y);
-        //   eatenMode();
+
+        // Handle Eaten Mode
+        if (isEatenMode) {
+            if (point.equals(getBasePosition())) {
+                isEatenMode = false;
+                speed = 2;
+                // Return to the current mode (either scatter or chase)
+                if (isScatterMode) {
+                    scatterMode();
+                } else {
+                    chaseMode();
+                }
+            }
+            move();
+            return;
+        }
+
+        // Handle Frightened Mode
+        if (isFrightenedMode) {
+            if (currentTime - lastFrightenedTime >= FRIGHTENED_INTERVAL) {
+                isFrightenedMode = false;
+                speed = 2;
+                // Return to the current mode (either scatter or chase)
+                if (isScatterMode) {
+                    scatterMode();
+                } else {
+                    chaseMode();
+                }
+            } else {
+                frightenedMode();
+            }
+            move();
+            return;
+        }
+
+        // Handle Scatter and Chase modes
+        if (isScatterMode) {
+            if (currentTime - lastScatterTime >= SCATTER_INTERVAL) {
+                chaseMode();
+                lastChaseTime = currentTime;
+                isScatterMode = false;
+            }
+        } else {
+            if (currentTime - lastChaseTime >= CHASE_INTERVAL) {
+                scatterMode();
+                lastScatterTime = currentTime;
+                isScatterMode = true;
+            }
+        }
+
         move();
     }
 
     public void move() {
+      //  System.out.println(target);
         // Update position
         if (isStart) {
             getShortWay();
@@ -137,7 +172,6 @@ abstract public class Ghost extends Entity {
                 isStart = true;
             }
         }
-        //System.out.println(point.x + " " + point.y + "this cunt pixel " + cuntPixel);
     }
 
     public String getCurrentPosition() {//function that return the  current direction
@@ -145,7 +179,6 @@ abstract public class Ghost extends Entity {
     }
 
     public void getShortWay() {
-        //  behaviorIfInCage();
         List<Point> direction = collisionChecker.getDirection(this);
         Ghost.this.sortWay = direction.getFirst();
         double minDistance = Ghost.this.sortWay.distance(target);
@@ -157,12 +190,23 @@ abstract public class Ghost extends Entity {
         }
     }
 
-    public void behaviorIfInCage() {
-        //need to update the target after it finish !!!!
-        if (point.y == 14 || point.y == 13 && point.x >= 9 && point.x <= 15) {
-            target = new Point(15, 12);
-        }
-    }
+//    public void behaviorIfInCage() {//not feins
+//        if (point.y == 14 && point.x >= 9 && point.x <= 15 && !isEatenMode ) {
+//            target = new Point(17, 12);
+//        } else if (point.equals(new Point(17, 12))) {
+//            System.out.println("its in");
+//
+//            // Ghost has reached the exit point, return to current game mode
+//            if (isScatterMode) {
+//                scatterMode();
+//            } else if (isFrightenedMode) {
+//                frightenedMode();
+//            } else {
+//                System.out.println("innn");
+//                chaseMode();
+//            }
+//        }
+//    }
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
